@@ -77,6 +77,44 @@ class Service
 
         return $this->class;
     }
+    
+
+    /**
+     * Returns true if type is not in classNames
+     * 
+     * and classNames is not empty
+     * 
+     * @param Type $type
+     * @return bool
+     */
+    public function filterType(Type $type)
+    {
+        $classNames = $this->config->getClassNamesArray();
+        if (empty($classNames)) {
+            return false;
+        }
+        if (in_array($type->getIdentifier(), $classNames)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Filter Types
+     *
+     * @return array
+     */
+    public function getTypes()
+    {
+        $filteredTypes = array();
+        foreach($this->types as $type) {
+            if (!$this->filterType($type)) {
+                $filteredTypes[] = $type;
+            }
+        }
+        return $filteredTypes;
+    }    
 
     /**
      * Generates the class if not already generated
